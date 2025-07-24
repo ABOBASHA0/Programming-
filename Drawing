@@ -1,0 +1,137 @@
+from turtle import *
+
+from tkinter import *
+
+
+
+# Create GUI window
+
+win = Tk()
+
+win.title("Turtle Controller")
+
+
+
+#drawing area for turtle
+
+drawing_area=Canvas(win,height=200,width=200)
+
+drawing_area.pack()
+
+
+
+# Create turtle screen and turtle
+
+screen = TurtleScreen(drawing_area)
+
+pen = RawTurtle(screen)
+
+pen.shape("turtle")
+
+
+
+# Labels and Entries for angles/distances
+
+Label(win, text="Left (degrees):").pack()
+
+entry_left = Entry(win)
+
+entry_left.pack()
+
+
+
+Label(win, text="Right (degrees):").pack()
+
+entry_right = Entry(win)
+
+entry_right.pack()
+
+
+
+Label(win, text="Forward (pixels):").pack()
+
+entry_forward = Entry(win)
+
+entry_forward.pack()
+
+
+
+Label(win, text="Backward (pixels):").pack()
+
+entry_backward = Entry(win)
+
+entry_backward.pack()
+
+
+
+# Movement functions
+
+def move_left():
+
+    try:
+
+        angle = int(entry_left.get())
+
+        pen.left(angle)
+
+    except ValueError:
+
+        print("Invalid input for left turn.")
+
+
+
+def move_right():
+
+    try:
+
+        angle = int(entry_right.get())
+
+        pen.right(angle)
+
+    except ValueError:
+
+        print("Invalid input for right turn.")
+
+ 
+
+def move_forward():
+
+    try:
+
+        distance = int(entry_forward.get())
+
+        pen.forward(distance)
+
+    except ValueError:
+
+        print("Invalid input for forward move.")
+
+
+
+def move_backward():
+
+    try:
+
+        distance = int(entry_backward.get())
+
+        pen.backward(distance)
+
+    except ValueError:
+
+        print("Invalid input for backward move.")
+
+
+
+# Buttons
+
+Button(win, text="Rotate Left", command=move_left).pack()
+
+Button(win, text="Rotate Right", command=move_right).pack()
+
+Button(win, text="Move Forward", command=move_forward).pack()
+
+Button(win, text="Move Backward", command=move_backward).pack()
+
+
+
+win.mainloop() 
