@@ -1,0 +1,465 @@
+from turtle import *
+
+from random import *
+
+import tkinter as tk
+
+def tul_window():
+
+    game_screen=Screen()
+
+    game_screen.bgcolor("black")
+
+
+
+    player=Turtle(shape="turtle")
+
+    player.pencolor("white")
+
+    player.penup()
+
+    player.setx(-150)
+
+    player.sety(-150)
+
+    player.pendown()
+
+    for i in range(4):
+
+       player.forward(300)
+
+       player.left(90)
+
+    player.penup()
+
+    player.home()
+
+    name_game=Turtle()
+
+    name_game.hideturtle()
+
+    name_game.penup()
+
+    name_game.goto(0, 160)
+
+    name_game.color("white")
+
+    name_game.write("TURTLE GAME (by abobbasha)", align="center", font=("Arial", 24, "bold"))
+
+    bot=[]
+
+    for _ in range(4):
+
+        b = Turtle(shape="turtle")
+
+        b.pencolor("gray")
+
+        b.penup()
+
+        b.setpos(randint(-150, 150), randint(-150, 150))
+
+        bot.append({"turtle":b,"forward": randint(5, 15),"left": randint(10, 30)})
+
+    def border_bots():
+
+        for b in bot:
+
+            t = b["turtle"]
+
+            if (t.xcor() > 150 or t.xcor() < -150 or t.ycor() > 150 or t.ycor() < -150):
+
+                t.setpos(randint(-130,130),randint(-130,130))
+
+    def move_bots():
+
+        for b in bot:
+
+            b["turtle"].forward(b["forward"])
+
+            b["turtle"].left(b["left"])
+
+        border_bots()
+
+        game_screen.ontimer(move_bots, 200)
+
+    move_bots()  
+
+
+
+    score = 0  
+
+
+
+    score_display = Turtle()
+
+    score_display.hideturtle()
+
+    score_display.penup()
+
+    score_display.goto(150, 190)
+
+    score_display.color("white")
+
+
+
+    def update_score():
+
+        score_display.clear()
+
+        score_display.write(f"Points = {score}", align="left", font=("Arial", 24, "bold"))
+
+
+
+    def kill_bot():
+
+        global score
+
+        for b in bot:
+
+            t = b["turtle"]
+
+            if player.distance(t) < 20:
+
+                t.hideturtle()
+
+                bot.remove(b) 
+
+                score += 1
+
+                update_score()  
+
+
+
+    def win():
+
+        if not bot:
+
+            won=Turtle()
+
+            won.penup()
+
+            won.hideturtle()
+
+            won.goto(0,0)
+
+            won.pencolor("green")
+
+            won.write("YOU WIN", align="center", font=("Arial", 24, "bold"))
+
+
+
+
+
+    bot_kill_you=[]
+
+    for _ in range(4):
+
+        bk = Turtle(shape="turtle")
+
+        bk.pencolor("red")
+
+        bk.penup()
+
+        bk.setpos(randint(-150, 150), randint(-150, 150))
+
+        bot_kill_you.append({"turtle":bk,"forward": randint(5, 15),"left": randint(10, 30)})
+
+    def border_bots():
+
+        for bk in bot_kill_you:
+
+            tk = bk["turtle"]
+
+            if (tk.xcor() > 150 or tk.xcor() < -150 or tk.ycor() > 150 or tk.ycor() < -150):
+
+                tk.setpos(randint(-130,130),randint(-130,130))
+
+    def move_killer_bots():
+
+        for bk in bot_kill_you:
+
+            bk["turtle"].forward(bk["forward"])
+
+            bk["turtle"].left(bk["left"])
+
+        border_bots()
+
+        game_screen.ontimer(move_killer_bots, 200)
+
+    move_bots()
+
+    move_killer_bots()
+
+
+
+    def show_reset_button():
+
+        reset_btn=Turtle()
+
+        reset_btn.hideturtle()
+
+        reset_btn.penup()
+
+        reset_btn.goto(0, -40)
+
+        reset_btn.color("white")
+
+        reset_btn.write("CLICK HERE TO RESTART", align="center", font=("Arial", 16, "bold"))
+
+
+
+        def on_click(x, y):
+
+            reset_btn.clear()
+
+            reset_btn.hideturtle()
+
+            game_screen.clearscreen()
+
+            tul_window()  
+
+
+
+        reset_btn.goto(-100, -60)
+
+        reset_btn.shape("square")
+
+        reset_btn.shapesize(2, 10)
+
+        reset_btn.fillcolor("gray")
+
+        reset_btn.showturtle()
+
+        reset_btn.onclick(lambda x, y: on_click(x, y))
+
+    
+
+        
+
+    def tk_show_reset_button():
+
+        reset_win = tk.Toplevel()
+
+        reset_win.title("Game Over")
+
+        reset_win.geometry("300x150")
+
+        reset_win.configure(bg="black")
+
+
+
+        label = tk.Label(reset_win, text="YOU LOST!", font=("Arial", 18), fg="red", bg="black")
+
+        label.pack(pady=10)
+
+
+
+        btn_restart = tk.Button(reset_win,text="Restart Game",font=("Arial", 12),command=lambda: [reset_win.destroy(), lose_writer.clear() if lose_writer else None, tul_window()])
+
+        btn_restart.pack(pady=10)
+
+
+
+        btn_quit = tk.Button(reset_win, text="Quit", font=("Arial", 12), command=reset_win.destroy)
+
+        btn_quit.pack(pady=5)
+
+        global lose_writer
+
+        lose_writer = None
+
+
+
+    def border():
+
+        if (player.xcor()>150 or player.xcor()<-150 or player.ycor()>150 or player.ycor()<-150):
+
+            player.hideturtle()
+
+            global lose_writer
+
+            lose_writer=Turtle()
+
+            lose_writer.hideturtle()
+
+            lose_writer.color("red")
+
+            lose_writer.penup()
+
+            lose_writer.goto(0, 0)
+
+            lose_writer.write("YOU LOSE", align="center", font=("Arial", 24, "bold"))
+
+            tk_show_reset_button()
+
+            game_screen.update()
+
+    def touch_killer_bot():
+
+        for bk in bot_kill_you:
+
+            tk = bk["turtle"]
+
+            if player.distance(tk) < 20:
+
+                tk.hideturtle()
+
+                bot_kill_you.remove(bk) 
+
+                for b in bot:
+
+                    b["turtle"].hideturtle()
+
+                for bk2 in bot_kill_you:
+
+                    bk2["turtle"].hideturtle()
+
+                player.hideturtle()
+
+                lose_writer=Turtle()
+
+                lose_writer.hideturtle()
+
+                lose_writer.color("red")
+
+                lose_writer.penup()
+
+                lose_writer.goto(0,0)
+
+                lose_writer.write("YOU LOSE", align="center", font=("Arial", 24, "bold"))
+
+                tk_show_reset_button()
+
+                game_screen.update()
+
+                return True
+
+        return False
+
+    def game_loop():
+
+        if touch_killer_bot():
+
+            return
+
+        kill_bot()
+
+        win()
+
+        game_screen.ontimer(game_loop, 100)
+
+    update_score()
+
+    game_loop()
+
+    def move_right():
+
+        player.right(10)
+
+        border()
+
+    def move_left():
+
+        player.left(10)
+
+        border()
+
+    def move_forward():
+
+        player.forward(10)
+
+        border()
+
+    def move_back():
+
+        player.back(10)
+
+        border()
+
+    game_screen.listen()
+
+    onkeypress(move_right,"Right")
+
+    onkeypress(move_right,"D")
+
+    onkeypress(move_right,"d")
+
+    onkeypress(move_left,"Left")
+
+    onkeypress(move_left,"a")
+
+    onkeypress(move_left,"A")
+
+    onkeypress(move_forward,"Up")
+
+    onkeypress(move_forward,"w")
+
+    onkeypress(move_forward,"W")
+
+    onkeypress(move_back,"Down")
+
+    onkeypress(move_back,"s")
+
+    onkeypress(move_back,"S")
+
+
+
+win = tk.Tk()
+
+win.title("TK Controls Turtle")
+
+win.geometry("300x200")
+
+
+
+label = tk.Label(win, text=" PRESS TO start GAME ", font=("Arial", 14))
+
+label.pack(pady=20)
+
+xplin_label=tk.Label(win,text="if you eat all turtles you win", font=("Arial", 14))
+
+xplin_label.pack(pady=20)
+
+xplin_label_2=tk.Label(win,text="if you touch the red turtles you lose", font=("Arial", 14))
+
+xplin_label_2.pack(pady=20)
+
+xplin_label_3=tk.Label(win,text="if you Cross the line you will lose", font=("Arial", 14))
+
+xplin_label_3.pack(pady=20)
+
+xplin_label_4=tk.Label(win,text="if you see any error or any idea in your mind tell me in my eamil(modyabobasha76@gamil.com)", font=("Arial", 14))
+
+xplin_label_4.pack(pady=20)
+
+xplin_label_5=tk.Label(win,text="this game is dvi by my(abobasha)and this is my eamil(modyabobasha76@gamil.com) if you want make a simple game free", font=("Arial", 14))
+
+xplin_label_5.pack(pady=20)
+
+xplin_label_6=tk.Label(win,text="walk forward :w or up ", font=("Arial", 14))
+
+xplin_label_6.pack()
+
+xplin_label_7=tk.Label(win,text="walk backward :s or Down ", font=("Arial", 14))
+
+xplin_label_7.pack()
+
+xplin_label_8=tk.Label(win,text="walk right :d or right ", font=("Arial", 14))
+
+xplin_label_8.pack()
+
+xplin_label_9=tk.Label(win,text="walk left :a or left ", font=("Arial", 14))
+
+xplin_label_9.pack()
+
+btn_s = tk.Button(win, text="Start ", command=tul_window)
+
+btn_s.pack()
+
+btn_d = tk.Button(win, text="Quit ", command=win.destroy)
+
+btn_d.pack()
+
+
+
+win.mainloop() 
